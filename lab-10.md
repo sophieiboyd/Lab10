@@ -127,6 +127,16 @@ summary(m_bty)
     ## Multiple R-squared:  0.03502,    Adjusted R-squared:  0.03293 
     ## F-statistic: 16.73 on 1 and 461 DF,  p-value: 5.083e-05
 
+``` r
+tidy(m_bty)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term        estimate std.error statistic   p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)   3.88      0.0761     51.0  1.56e-191
+    ## 2 bty_avg       0.0666    0.0163      4.09 5.08e-  5
+
 For each 1-point increase in beauty rating, the model predicts a
 .067-point increase in evaluation score.
 
@@ -159,6 +169,166 @@ evals %>%
   overstate how well the model fits the data. By looking at the line
   only, it is easier to where the model does not match up with the
   actual data.
+
+# Part 3: Linear regression with a categorical predictor
+
+\##Exercise 1
+
+``` r
+m_gen <- lm(score ~ gender, data = evals)
+summary(m_gen)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ gender, data = evals)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.83433 -0.36357  0.06567  0.40718  0.90718 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  4.09282    0.03867 105.852  < 2e-16 ***
+    ## gendermale   0.14151    0.05082   2.784  0.00558 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5399 on 461 degrees of freedom
+    ## Multiple R-squared:  0.01654,    Adjusted R-squared:  0.01441 
+    ## F-statistic: 7.753 on 1 and 461 DF,  p-value: 0.005583
+
+The reference level for gender is female. The model predicts that, on
+average, male professors’ evaluation ratings will be .14 points higher
+than female professors’ evaluation ratings.
+
+Predicted evaluation score for female professor = 4.09 (intercept)
+Predicted evaluation score for male professor = 4.23 (intercept + slope)
+
+## Exercise 2
+
+``` r
+evals <- evals %>%
+  mutate(rank_relevel = relevel(rank, ref = "tenure track"))
+
+evals <- evals %>%
+  mutate(tenure_eligible = case_when(
+    rank == "teaching" ~ "no",
+    rank == "tenure track" ~ "yes",
+    rank == "tenured" ~ "yes"
+  ))
+```
+
+``` r
+m_rank <- lm(score ~ rank, data = evals)
+summary(m_rank)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ rank, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8546 -0.3391  0.1157  0.4305  0.8609 
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)       4.28431    0.05365  79.853   <2e-16 ***
+    ## ranktenure track -0.12968    0.07482  -1.733   0.0837 .  
+    ## ranktenured      -0.14518    0.06355  -2.284   0.0228 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5419 on 460 degrees of freedom
+    ## Multiple R-squared:  0.01163,    Adjusted R-squared:  0.007332 
+    ## F-statistic: 2.706 on 2 and 460 DF,  p-value: 0.06786
+
+``` r
+m_rank_relevel <- lm(score ~ rank_relevel, data = evals)
+summary(m_rank_relevel)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ rank_relevel, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8546 -0.3391  0.1157  0.4305  0.8609 
+    ## 
+    ## Coefficients:
+    ##                      Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)           4.15463    0.05214  79.680   <2e-16 ***
+    ## rank_relevelteaching  0.12968    0.07482   1.733   0.0837 .  
+    ## rank_releveltenured  -0.01550    0.06228  -0.249   0.8036    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5419 on 460 degrees of freedom
+    ## Multiple R-squared:  0.01163,    Adjusted R-squared:  0.007332 
+    ## F-statistic: 2.706 on 2 and 460 DF,  p-value: 0.06786
+
+``` r
+m_tenure <- lm(score ~ tenure_eligible, data = evals)
+summary(m_tenure)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ tenure_eligible, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8438 -0.3438  0.1157  0.4360  0.8562 
+    ## 
+    ## Coefficients:
+    ##                    Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)          4.2843     0.0536  79.934   <2e-16 ***
+    ## tenure_eligibleyes  -0.1406     0.0607  -2.315    0.021 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5413 on 461 degrees of freedom
+    ## Multiple R-squared:  0.0115, Adjusted R-squared:  0.009352 
+    ## F-statistic: 5.361 on 1 and 461 DF,  p-value: 0.02103
+
+## Exercise 3
+
+##### Model using original “rank” variable:
+
+- Intercept: The average predicted evaluation score for teaching
+  professors is 4.28.
+- Slopes: On average, tenure track professors are expected to have
+  evaluation scores .13 points lower than teaching professors. Tenured
+  professors are expected to have evaluation scores .15 points lower
+  than teaching professors.
+
+##### Model using “rank_relevel”:
+
+- Intercept: The average predicted evaluation score for tenure track
+  professors is 4.15.
+- On average, teaching professors are expected to have evaluation scores
+  .13 points higher than tenure track professors. Tenured professors are
+  expected to have evaluation scores .02 points lower than tenure track
+  professors.
+
+##### Model using “tenure_eligible”:
+
+- Intercept: The average predicted evaluation score for teaching
+  professors is 4.28.
+- Slope: Compared to teaching professors, tenure eligible professors are
+  predicted to have evaluation scores that are, on average, .14 points
+  lower.
+
+Taken together, the three models communicate that teaching professors
+perform best on student evaluations.
+
+## Exercise 4
+
+The R-square value is .012, meaning that rank only explains about 1.2%
+of the variance in evaluation scores. Overall, rank seems to play a
+small role.
 
 ## Hint
 

@@ -70,6 +70,7 @@ Jittering separates points that overlap each other on the scatterplot, providing
 ```{r m_bty-model}
 m_bty <- lm(score ~ bty_avg, data = evals)
 summary(m_bty)
+tidy(m_bty)
 ```
 
 For each 1-point increase in beauty rating, the model predicts a .067-point increase in evaluation score. 
@@ -91,6 +92,69 @@ evals %>%
 - The predicted evaluation score for a professor with a beauty rating of 0 is 3.88. In context, I don't think this value is particularly meaningful. I believe that beauty ratings ranged from 1-10, in which case a rating of 0 would not be possible in our dataset. 
 - The R-square value is .035, meaning that beauty ratings explain 3.5% of the variance in evaluation scores. Overall, it seems that a professor's attractiveness is not especially influential in student evaluations.
 - At this stage, leaving the shading on the plot may lead someone to overstate how well the model fits the data. By looking at the line only, it is easier to where the model does not match up with the actual data.
+
+# Part 3: Linear regression with a categorical predictor
+
+##Exercise 1
+
+```{r m_gen-model}
+m_gen <- lm(score ~ gender, data = evals)
+summary(m_gen)
+```
+
+The reference level for gender is female. The model predicts that, on average, male professors' evaluation ratings will be .14 points higher than female professors' evaluation ratings. 
+
+Predicted evaluation score for female professor = 4.09 (intercept)
+Predicted evaluation score for male professor = 4.23 (intercept + slope)
+
+## Exercise 2
+
+```{r rank-relevel}
+evals <- evals %>%
+  mutate(rank_relevel = relevel(rank, ref = "tenure track"))
+
+evals <- evals %>%
+  mutate(tenure_eligible = case_when(
+    rank == "teaching" ~ "no",
+    rank == "tenure track" ~ "yes",
+    rank == "tenured" ~ "yes"
+  ))
+```
+
+```{r rank-model}
+m_rank <- lm(score ~ rank, data = evals)
+summary(m_rank)
+```
+
+```{r rank-relevel-model}
+m_rank_relevel <- lm(score ~ rank_relevel, data = evals)
+summary(m_rank_relevel)
+```
+
+```{r tenure-eligible-model}
+m_tenure <- lm(score ~ tenure_eligible, data = evals)
+summary(m_tenure)
+```
+
+## Exercise 3
+
+##### Model using original "rank" variable:
+- Intercept: The average predicted evaluation score for teaching professors is 4.28.
+- Slopes: On average, tenure track professors are expected to have evaluation scores .13 points lower than teaching professors. Tenured professors are expected to have evaluation scores .15 points lower than teaching professors. 
+
+##### Model using "rank_relevel":
+- Intercept: The average predicted evaluation score for tenure track professors is 4.15. 
+- On average, teaching professors are expected to have evaluation scores .13 points higher than tenure track professors. Tenured professors are expected to have evaluation scores .02 points lower than tenure track professors.
+
+##### Model using "tenure_eligible":
+- Intercept: The average predicted evaluation score for teaching professors is 4.28.
+- Slope: Compared to teaching professors, tenure eligible professors are predicted to have evaluation scores that are, on average, .14 points lower. 
+
+Taken together, the three models communicate that teaching professors perform best on student evaluations. 
+
+## Exercise 4
+
+The R-square value is .012, meaning that rank only explains about 1.2% of the variance in evaluation scores. Overall, rank seems to play a small role. 
 
 ## Hint
 
