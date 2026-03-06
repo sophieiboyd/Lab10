@@ -114,6 +114,14 @@ tidy(m_bty)
     ## 1 (Intercept)   3.88      0.0761     51.0  1.56e-191
     ## 2 bty_avg       0.0666    0.0163      4.09 5.08e-  5
 
+``` r
+glance(m_bty)$r.squared
+```
+
+    ## [1] 0.03502226
+
+Evaluation score = 3.88 + .067(beauty rating)
+
 For each 1-point increase in beauty rating, the model predicts a
 .067-point increase in evaluation score.
 
@@ -123,7 +131,7 @@ For each 1-point increase in beauty rating, the model predicts a
 evals %>%
   ggplot(aes(x = bty_avg, y = score)) +
   geom_jitter() +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, color = "orange") +
   labs(x = 'Beauty Rating',
        y = 'Evaluation Score')
 ```
@@ -136,20 +144,20 @@ evals %>%
   in evaluation score for each 1-point increase in beauty rating.
 - The predicted evaluation score for a professor with a beauty rating of
   0 is 3.88. In context, I don’t think this value is particularly
-  meaningful. I believe that beauty ratings ranged from 1-10, in which
-  case a rating of 0 would not be possible in our dataset.
+  meaningful. The beauty ratings ranged from 1-10, so a rating of 0
+  would not be possible in our dataset.
 - The R-square value is .035, meaning that beauty ratings explain 3.5%
   of the variance in evaluation scores. Overall, it seems that a
   professor’s attractiveness is not especially influential in student
   evaluations.
 - At this stage, leaving the shading on the plot may lead someone to
   overstate how well the model fits the data. By looking at the line
-  only, it is easier to where the model does not match up with the
+  only, it is easier to see where the model does not match up with the
   actual data.
 
 # Part 3: Linear regression with a categorical predictor
 
-\##Exercise 1
+## Exercise 1
 
 ``` r
 m_gen <- lm(score ~ gender, data = evals)
@@ -163,11 +171,13 @@ tidy(m_gen)
     ## 2 gendermale     0.142    0.0508      2.78 0.00558
 
 The reference level for gender is female. The model predicts that, on
-average, male professors’ evaluation ratings will be .14 points higher
-than female professors’ evaluation ratings.
+average, male professors’ evaluation scores will be .14 points higher
+than female professors’ evaluation scores.
 
-Predicted evaluation score for female professor = 4.09 (intercept)
-Predicted evaluation score for male professor = 4.23 (intercept + slope)
+Predicted mean evaluation score for female professor = 4.09 (intercept)
+
+Predicted mean evaluation score for male professor = 4.23 (intercept +
+slope)
 
 ## Exercise 2
 
@@ -312,8 +322,8 @@ glance(m_bty_gen)$adj.r.squared
 
 ## Exercise 1
 
-The coefficient for beauty increased slightly and the associated p-value
-decreased after adding gender as a predictor.
+The coefficient for beauty rating increased slightly and the associated
+p-value decreased after adding gender as a predictor.
 
 ## Exercise 2
 
@@ -345,7 +355,7 @@ tidy(m_bty_rank)
   .07-point increase in evaluation score.
 
 - Holding beauty rating constant, tenure-track professors are predicted
-  to have evaluation scores .016 points lower than teaching professors.
+  to have evaluation scores .16 points lower than teaching professors.
 
 # Part 5: The search for the best model
 
@@ -370,10 +380,10 @@ tidy(m_cls_profs)
     ## 2 cls_profssingle  -0.0292    0.0534    -0.547   0.585
 
 ``` r
-glance(m_cls_profs)$adj.r.squared
+glance(m_cls_profs)$r.squared
 ```
 
-    ## [1] -0.0015192
+    ## [1] 0.0006485905
 
 ## Exercise 3
 
@@ -456,15 +466,15 @@ Predicted eval score = 3.45 + .20(ethnicity) + .18(gender) -
 ## Exercise 7
 
 A professor at UT Austin with a high evaluation score would be a young,
-white, male, English-speaking professor teaching a one-credit class with
-a high percentage of students who completed the course evaluation and a
-high beauty rating.
+non-minority, male, English-speaking professor teaching a one-credit
+class with a high percentage of students who completed the course
+evaluation and a high beauty rating.
 
 ## Exercise 8
 
 I would not be entirely comfortable with generalizing these results to
-other universities, the makeup of the student body varies widely across
+other universities. The makeup of the student body varies widely across
 different universities, which would likely influence how students
 evaluate their professors. For example, given that UT Austin is a large
 state university, the results might not apply to a smaller liberal arts
-school.
+school if students had different course/professor preferences.
