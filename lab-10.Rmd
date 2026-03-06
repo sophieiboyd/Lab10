@@ -195,8 +195,46 @@ summary(m_bty_rank)
 
 ## Exercise 1
 
+I would expect the number of professors teaching sections of a course to be the weakest predictor of evaluation scores because students are typically only aware of/focused on the professor who taught their section when completing evaluations.
+
+## Exercise 2
+
+```{r m_cls_profs}
+m_cls_profs <- lm(score ~ cls_profs, data = evals)
+summary(m_cls_profs)
+```
+
+## Exercise 3
+
+If the model already included cls_perc_eval and cls_students, it would be redundant to include cls_did_eval, as the number of students who completed the evaluation does not communicate any new information beyond the total number of students in the class and the percentage of students who completed the evaluation. It would not explain additional variance in evaluation scores.
 
 
-## Hint
+## Exercise 4
 
-For Exercise 12, the `relevel()` function can be helpful!
+```{r full-model}
+m_full <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m_full)
+```
+
+## Exercise 5
+
+```{r best-model}
+m_best <- lm(score ~ ethnicity + gender + language + age + cls_perc_eval + cls_credits + bty_avg, data = evals)
+summary(m_best)
+```
+
+Predicted eval score = 3.45 + .20(ethnicity) + .18(gender) - .16(language) - .01(age) + .01(cls_perc_eval) + .52(cls_credits) + .06(bty_avg)
+
+## Exercise 6
+
+- beauty rating (numerical): Holding other predictors constant, each one-unit increase in beauty rating predicts a .06-point increase in evaluation score.
+
+- class credits (categorical): Holding other predictors constant, professors of one-credit classes are predicted to receive evaluation scores .52 points higher than professors of multicredit classes. 
+
+## Exercise 7
+
+A professor at UT Austin with a high evaluation score would be a young, white, male, English-speaking professor teaching a one-credit class with a high percentage of students who completed the course evaluation and a high beauty rating. 
+
+## Exercise 8
+
+I would not be entirely comfortable with generalizing these results to other universities, the makeup of the student body varies widely across different universities, which would likely influence how students evaluate their professors. For example, given that UT Austin is a large state university, the results might not apply to a smaller liberal arts school. 

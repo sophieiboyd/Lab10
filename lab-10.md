@@ -435,6 +435,144 @@ summary(m_bty_rank)
 
 ## Exercise 1
 
-## Hint
+I would expect the number of professors teaching sections of a course to
+be the weakest predictor of evaluation scores because students are
+typically only aware of/focused on the professor who taught their
+section when completing evaluations.
 
-For Exercise 12, the `relevel()` function can be helpful!
+## Exercise 2
+
+``` r
+m_cls_profs <- lm(score ~ cls_profs, data = evals)
+summary(m_cls_profs)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ cls_profs, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8554 -0.3846  0.1154  0.4154  0.8446 
+    ## 
+    ## Coefficients:
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)      4.18464    0.03111 134.493   <2e-16 ***
+    ## cls_profssingle -0.02923    0.05343  -0.547    0.585    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5443 on 461 degrees of freedom
+    ## Multiple R-squared:  0.0006486,  Adjusted R-squared:  -0.001519 
+    ## F-statistic: 0.2992 on 1 and 461 DF,  p-value: 0.5847
+
+## Exercise 3
+
+If the model already included cls_perc_eval and cls_students, it would
+be redundant to include cls_did_eval, as the number of students who
+completed the evaluation does not communicate any new information beyond
+the total number of students in the class and the percentage of students
+who completed the evaluation. It would not explain additional variance
+in evaluation scores.
+
+## Exercise 4
+
+``` r
+m_full <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m_full)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ rank + ethnicity + gender + language + age + 
+    ##     cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + 
+    ##     bty_avg, data = evals)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.84482 -0.31367  0.08559  0.35732  1.10105 
+    ## 
+    ## Coefficients:
+    ##                         Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)            3.5305036  0.2408200  14.660  < 2e-16 ***
+    ## ranktenure track      -0.1070121  0.0820250  -1.305 0.192687    
+    ## ranktenured           -0.0450371  0.0652185  -0.691 0.490199    
+    ## ethnicitynot minority  0.1869649  0.0775329   2.411 0.016290 *  
+    ## gendermale             0.1786166  0.0515346   3.466 0.000579 ***
+    ## languagenon-english   -0.1268254  0.1080358  -1.174 0.241048    
+    ## age                   -0.0066498  0.0030830  -2.157 0.031542 *  
+    ## cls_perc_eval          0.0056996  0.0015514   3.674 0.000268 ***
+    ## cls_students           0.0004455  0.0003585   1.243 0.214596    
+    ## cls_levelupper         0.0187105  0.0555833   0.337 0.736560    
+    ## cls_profssingle       -0.0085751  0.0513527  -0.167 0.867458    
+    ## cls_creditsone credit  0.5087427  0.1170130   4.348  1.7e-05 ***
+    ## bty_avg                0.0612651  0.0166755   3.674 0.000268 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.504 on 450 degrees of freedom
+    ## Multiple R-squared:  0.1635, Adjusted R-squared:  0.1412 
+    ## F-statistic: 7.331 on 12 and 450 DF,  p-value: 2.406e-12
+
+## Exercise 5
+
+``` r
+m_best <- lm(score ~ ethnicity + gender + language + age + cls_perc_eval + cls_credits + bty_avg, data = evals)
+summary(m_best)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ ethnicity + gender + language + age + cls_perc_eval + 
+    ##     cls_credits + bty_avg, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.9067 -0.3103  0.0849  0.3712  1.0611 
+    ## 
+    ## Coefficients:
+    ##                        Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)            3.446967   0.203191  16.964  < 2e-16 ***
+    ## ethnicitynot minority  0.204710   0.074710   2.740 0.006384 ** 
+    ## gendermale             0.184780   0.049889   3.704 0.000238 ***
+    ## languagenon-english   -0.161463   0.103213  -1.564 0.118427    
+    ## age                   -0.005008   0.002606  -1.922 0.055289 .  
+    ## cls_perc_eval          0.005094   0.001438   3.543 0.000436 ***
+    ## cls_creditsone credit  0.515065   0.104860   4.912 1.26e-06 ***
+    ## bty_avg                0.064996   0.016327   3.981 7.99e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.503 on 455 degrees of freedom
+    ## Multiple R-squared:  0.1576, Adjusted R-squared:  0.1446 
+    ## F-statistic: 12.16 on 7 and 455 DF,  p-value: 2.879e-14
+
+Predicted eval score = 3.45 + .20(ethnicity) + .18(gender) -
+.16(language) - .01(age) + .01(cls_perc_eval) + .52(cls_credits) +
+.06(bty_avg)
+
+## Exercise 6
+
+- beauty rating (numerical): Holding other predictors constant, each
+  one-unit increase in beauty rating predicts a .06-point increase in
+  evaluation score.
+
+- class credits (categorical): Holding other predictors constant,
+  professors of one-credit classes are predicted to receive evaluation
+  scores .52 points higher than professors of multicredit classes.
+
+## Exercise 7
+
+A professor at UT Austin with a high evaluation score would be a young,
+white, male, English-speaking professor teaching a one-credit class with
+a high percentage of students who completed the course evaluation and a
+high beauty rating.
+
+## Exercise 8
+
+I would not be entirely comfortable with generalizing these results to
+other universities, the makeup of the student body varies widely across
+different universities, which would likely influence how students
+evaluate their professors. For example, given that UT Austin is a large
+state university, the results might not apply to a smaller liberal arts
+school.
