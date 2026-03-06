@@ -330,6 +330,111 @@ The R-square value is .012, meaning that rank only explains about 1.2%
 of the variance in evaluation scores. Overall, rank seems to play a
 small role.
 
+# Part 4: Multiple linear regression
+
+``` r
+m_bty <- lm(score ~ bty_avg, data = evals)
+summary(m_bty)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ bty_avg, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.9246 -0.3690  0.1420  0.3977  0.9309 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  3.88034    0.07614   50.96  < 2e-16 ***
+    ## bty_avg      0.06664    0.01629    4.09 5.08e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5348 on 461 degrees of freedom
+    ## Multiple R-squared:  0.03502,    Adjusted R-squared:  0.03293 
+    ## F-statistic: 16.73 on 1 and 461 DF,  p-value: 5.083e-05
+
+``` r
+m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
+summary(m_bty_gen)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ bty_avg + gender, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8305 -0.3625  0.1055  0.4213  0.9314 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  3.74734    0.08466  44.266  < 2e-16 ***
+    ## bty_avg      0.07416    0.01625   4.563 6.48e-06 ***
+    ## gendermale   0.17239    0.05022   3.433 0.000652 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5287 on 460 degrees of freedom
+    ## Multiple R-squared:  0.05912,    Adjusted R-squared:  0.05503 
+    ## F-statistic: 14.45 on 2 and 460 DF,  p-value: 8.177e-07
+
+## Exercise 1
+
+The coefficient for beauty increased slightly and the associated p-value
+decreased after adding gender as a predictor.
+
+## Exercise 2
+
+Yes, gender is an individual significant predictor of evaluation score.
+
+## Exercise 3
+
+I would say that adding gender as a predictor was somewhat helpful. The
+model with beauty alone explained 3.3% of the variance in evaluation
+scores, whereas the model that added gender explained 5.5% of the
+variance in evaluation scores.
+
+## Exercise 4
+
+``` r
+m_bty_rank <- lm(score ~ bty_avg + rank, data = evals)
+summary(m_bty_rank)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = score ~ bty_avg + rank, data = evals)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -1.8713 -0.3642  0.1489  0.4103  0.9525 
+    ## 
+    ## Coefficients:
+    ##                  Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)       3.98155    0.09078  43.860  < 2e-16 ***
+    ## bty_avg           0.06783    0.01655   4.098 4.92e-05 ***
+    ## ranktenure track -0.16070    0.07395  -2.173   0.0303 *  
+    ## ranktenured      -0.12623    0.06266  -2.014   0.0445 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.5328 on 459 degrees of freedom
+    ## Multiple R-squared:  0.04652,    Adjusted R-squared:  0.04029 
+    ## F-statistic: 7.465 on 3 and 459 DF,  p-value: 6.88e-05
+
+- Holding rank constant, a one-unit increase in beauty rating predicts a
+  .07-point increase in evaluation score.
+
+- Holding beauty rating constant, tenure-track professors are predicted
+  to have evaluation scores .016 points lower than teaching professors.
+
+# Part 5: The search for the best model
+
+## Exercise 1
+
 ## Hint
 
 For Exercise 12, the `relevel()` function can be helpful!

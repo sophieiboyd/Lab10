@@ -156,6 +156,47 @@ Taken together, the three models communicate that teaching professors perform be
 
 The R-square value is .012, meaning that rank only explains about 1.2% of the variance in evaluation scores. Overall, rank seems to play a small role. 
 
+# Part 4: Multiple linear regression
+
+```{r m_bty}
+m_bty <- lm(score ~ bty_avg, data = evals)
+summary(m_bty)
+```
+
+```{r m_bty_gen}
+m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
+summary(m_bty_gen)
+```
+
+## Exercise 1
+
+The coefficient for beauty increased slightly and the associated p-value decreased after adding gender as a predictor.
+
+## Exercise 2
+
+Yes, gender is an individual significant predictor of evaluation score. 
+
+## Exercise 3
+
+I would say that adding gender as a predictor was somewhat helpful. The model with beauty alone explained 3.3% of the variance in evaluation scores, whereas the model that added gender explained 5.5% of the variance in evaluation scores. 
+
+## Exercise 4
+
+```{r m_bty_rank}
+m_bty_rank <- lm(score ~ bty_avg + rank, data = evals)
+summary(m_bty_rank)
+```
+
+- Holding rank constant, a one-unit increase in beauty rating predicts a .07-point increase in evaluation score.
+
+- Holding beauty rating constant, tenure-track professors are predicted to have evaluation scores .016 points lower than teaching professors. 
+
+# Part 5: The search for the best model
+
+## Exercise 1
+
+
+
 ## Hint
 
 For Exercise 12, the `relevel()` function can be helpful!
