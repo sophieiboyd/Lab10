@@ -69,7 +69,6 @@ Jittering separates points that overlap each other on the scatterplot, providing
 
 ```{r m_bty-model}
 m_bty <- lm(score ~ bty_avg, data = evals)
-summary(m_bty)
 tidy(m_bty)
 ```
 
@@ -99,7 +98,7 @@ evals %>%
 
 ```{r m_gen-model}
 m_gen <- lm(score ~ gender, data = evals)
-summary(m_gen)
+tidy(m_gen)
 ```
 
 The reference level for gender is female. The model predicts that, on average, male professors' evaluation ratings will be .14 points higher than female professors' evaluation ratings. 
@@ -123,17 +122,23 @@ evals <- evals %>%
 
 ```{r rank-model}
 m_rank <- lm(score ~ rank, data = evals)
-summary(m_rank)
+tidy(m_rank)
+
+glance(m_rank)$r.squared
 ```
 
 ```{r rank-relevel-model}
 m_rank_relevel <- lm(score ~ rank_relevel, data = evals)
-summary(m_rank_relevel)
+tidy(m_rank_relevel)
+
+glance(m_rank_relevel)$r.squared
 ```
 
 ```{r tenure-eligible-model}
 m_tenure <- lm(score ~ tenure_eligible, data = evals)
-summary(m_tenure)
+tidy(m_tenure)
+
+glance(m_tenure)$r.squared
 ```
 
 ## Exercise 3
@@ -160,12 +165,16 @@ The R-square value is .012, meaning that rank only explains about 1.2% of the va
 
 ```{r m_bty}
 m_bty <- lm(score ~ bty_avg, data = evals)
-summary(m_bty)
+tidy(m_bty)
+
+glance(m_bty)$adj.r.squared
 ```
 
 ```{r m_bty_gen}
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
-summary(m_bty_gen)
+tidy(m_bty_gen)
+
+glance(m_bty_gen)$adj.r.squared
 ```
 
 ## Exercise 1
@@ -184,7 +193,7 @@ I would say that adding gender as a predictor was somewhat helpful. The model wi
 
 ```{r m_bty_rank}
 m_bty_rank <- lm(score ~ bty_avg + rank, data = evals)
-summary(m_bty_rank)
+tidy(m_bty_rank)
 ```
 
 - Holding rank constant, a one-unit increase in beauty rating predicts a .07-point increase in evaluation score.
@@ -201,7 +210,9 @@ I would expect the number of professors teaching sections of a course to be the 
 
 ```{r m_cls_profs}
 m_cls_profs <- lm(score ~ cls_profs, data = evals)
-summary(m_cls_profs)
+tidy(m_cls_profs)
+
+glance(m_cls_profs)$adj.r.squared
 ```
 
 ## Exercise 3
@@ -213,14 +224,18 @@ If the model already included cls_perc_eval and cls_students, it would be redund
 
 ```{r full-model}
 m_full <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
-summary(m_full)
+tidy(m_full)
+
+glance(m_full)$adj.r.squared
 ```
 
 ## Exercise 5
 
 ```{r best-model}
 m_best <- lm(score ~ ethnicity + gender + language + age + cls_perc_eval + cls_credits + bty_avg, data = evals)
-summary(m_best)
+tidy(m_best)
+
+glance(m_best)$adj.r.squared
 ```
 
 Predicted eval score = 3.45 + .20(ethnicity) + .18(gender) - .16(language) - .01(age) + .01(cls_perc_eval) + .52(cls_credits) + .06(bty_avg)

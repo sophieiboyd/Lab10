@@ -105,29 +105,6 @@ ratings tended to be more common.
 
 ``` r
 m_bty <- lm(score ~ bty_avg, data = evals)
-summary(m_bty)
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = score ~ bty_avg, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.9246 -0.3690  0.1420  0.3977  0.9309 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  3.88034    0.07614   50.96  < 2e-16 ***
-    ## bty_avg      0.06664    0.01629    4.09 5.08e-05 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5348 on 461 degrees of freedom
-    ## Multiple R-squared:  0.03502,    Adjusted R-squared:  0.03293 
-    ## F-statistic: 16.73 on 1 and 461 DF,  p-value: 5.083e-05
-
-``` r
 tidy(m_bty)
 ```
 
@@ -176,27 +153,14 @@ evals %>%
 
 ``` r
 m_gen <- lm(score ~ gender, data = evals)
-summary(m_gen)
+tidy(m_gen)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ gender, data = evals)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.83433 -0.36357  0.06567  0.40718  0.90718 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  4.09282    0.03867 105.852  < 2e-16 ***
-    ## gendermale   0.14151    0.05082   2.784  0.00558 ** 
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5399 on 461 degrees of freedom
-    ## Multiple R-squared:  0.01654,    Adjusted R-squared:  0.01441 
-    ## F-statistic: 7.753 on 1 and 461 DF,  p-value: 0.005583
+    ## # A tibble: 2 × 5
+    ##   term        estimate std.error statistic p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)    4.09     0.0387    106.   0      
+    ## 2 gendermale     0.142    0.0508      2.78 0.00558
 
 The reference level for gender is female. The model predicts that, on
 average, male professors’ evaluation ratings will be .14 points higher
@@ -221,77 +185,56 @@ evals <- evals %>%
 
 ``` r
 m_rank <- lm(score ~ rank, data = evals)
-summary(m_rank)
+tidy(m_rank)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ rank, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8546 -0.3391  0.1157  0.4305  0.8609 
-    ## 
-    ## Coefficients:
-    ##                  Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)       4.28431    0.05365  79.853   <2e-16 ***
-    ## ranktenure track -0.12968    0.07482  -1.733   0.0837 .  
-    ## ranktenured      -0.14518    0.06355  -2.284   0.0228 *  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5419 on 460 degrees of freedom
-    ## Multiple R-squared:  0.01163,    Adjusted R-squared:  0.007332 
-    ## F-statistic: 2.706 on 2 and 460 DF,  p-value: 0.06786
+    ## # A tibble: 3 × 5
+    ##   term             estimate std.error statistic   p.value
+    ##   <chr>               <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)         4.28     0.0537     79.9  1.02e-271
+    ## 2 ranktenure track   -0.130    0.0748     -1.73 8.37e-  2
+    ## 3 ranktenured        -0.145    0.0636     -2.28 2.28e-  2
+
+``` r
+glance(m_rank)$r.squared
+```
+
+    ## [1] 0.01162894
 
 ``` r
 m_rank_relevel <- lm(score ~ rank_relevel, data = evals)
-summary(m_rank_relevel)
+tidy(m_rank_relevel)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ rank_relevel, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8546 -0.3391  0.1157  0.4305  0.8609 
-    ## 
-    ## Coefficients:
-    ##                      Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)           4.15463    0.05214  79.680   <2e-16 ***
-    ## rank_relevelteaching  0.12968    0.07482   1.733   0.0837 .  
-    ## rank_releveltenured  -0.01550    0.06228  -0.249   0.8036    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5419 on 460 degrees of freedom
-    ## Multiple R-squared:  0.01163,    Adjusted R-squared:  0.007332 
-    ## F-statistic: 2.706 on 2 and 460 DF,  p-value: 0.06786
+    ## # A tibble: 3 × 5
+    ##   term                 estimate std.error statistic   p.value
+    ##   <chr>                   <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)            4.15      0.0521    79.7   2.58e-271
+    ## 2 rank_relevelteaching   0.130     0.0748     1.73  8.37e-  2
+    ## 3 rank_releveltenured   -0.0155    0.0623    -0.249 8.04e-  1
+
+``` r
+glance(m_rank_relevel)$r.squared
+```
+
+    ## [1] 0.01162894
 
 ``` r
 m_tenure <- lm(score ~ tenure_eligible, data = evals)
-summary(m_tenure)
+tidy(m_tenure)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ tenure_eligible, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8438 -0.3438  0.1157  0.4360  0.8562 
-    ## 
-    ## Coefficients:
-    ##                    Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)          4.2843     0.0536  79.934   <2e-16 ***
-    ## tenure_eligibleyes  -0.1406     0.0607  -2.315    0.021 *  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5413 on 461 degrees of freedom
-    ## Multiple R-squared:  0.0115, Adjusted R-squared:  0.009352 
-    ## F-statistic: 5.361 on 1 and 461 DF,  p-value: 0.02103
+    ## # A tibble: 2 × 5
+    ##   term               estimate std.error statistic   p.value
+    ##   <chr>                 <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)           4.28     0.0536     79.9  2.72e-272
+    ## 2 tenure_eligibleyes   -0.141    0.0607     -2.32 2.10e-  2
+
+``` r
+glance(m_tenure)$r.squared
+```
+
+    ## [1] 0.01149589
 
 ## Exercise 3
 
@@ -334,52 +277,38 @@ small role.
 
 ``` r
 m_bty <- lm(score ~ bty_avg, data = evals)
-summary(m_bty)
+tidy(m_bty)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ bty_avg, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.9246 -0.3690  0.1420  0.3977  0.9309 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  3.88034    0.07614   50.96  < 2e-16 ***
-    ## bty_avg      0.06664    0.01629    4.09 5.08e-05 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5348 on 461 degrees of freedom
-    ## Multiple R-squared:  0.03502,    Adjusted R-squared:  0.03293 
-    ## F-statistic: 16.73 on 1 and 461 DF,  p-value: 5.083e-05
+    ## # A tibble: 2 × 5
+    ##   term        estimate std.error statistic   p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)   3.88      0.0761     51.0  1.56e-191
+    ## 2 bty_avg       0.0666    0.0163      4.09 5.08e-  5
+
+``` r
+glance(m_bty)$adj.r.squared
+```
+
+    ## [1] 0.03292903
 
 ``` r
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
-summary(m_bty_gen)
+tidy(m_bty_gen)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ bty_avg + gender, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8305 -0.3625  0.1055  0.4213  0.9314 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  3.74734    0.08466  44.266  < 2e-16 ***
-    ## bty_avg      0.07416    0.01625   4.563 6.48e-06 ***
-    ## gendermale   0.17239    0.05022   3.433 0.000652 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5287 on 460 degrees of freedom
-    ## Multiple R-squared:  0.05912,    Adjusted R-squared:  0.05503 
-    ## F-statistic: 14.45 on 2 and 460 DF,  p-value: 8.177e-07
+    ## # A tibble: 3 × 5
+    ##   term        estimate std.error statistic   p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)   3.75      0.0847     44.3  6.23e-168
+    ## 2 bty_avg       0.0742    0.0163      4.56 6.48e-  6
+    ## 3 gendermale    0.172     0.0502      3.43 6.52e-  4
+
+``` r
+glance(m_bty_gen)$adj.r.squared
+```
+
+    ## [1] 0.05503202
 
 ## Exercise 1
 
@@ -401,29 +330,16 @@ variance in evaluation scores.
 
 ``` r
 m_bty_rank <- lm(score ~ bty_avg + rank, data = evals)
-summary(m_bty_rank)
+tidy(m_bty_rank)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ bty_avg + rank, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8713 -0.3642  0.1489  0.4103  0.9525 
-    ## 
-    ## Coefficients:
-    ##                  Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)       3.98155    0.09078  43.860  < 2e-16 ***
-    ## bty_avg           0.06783    0.01655   4.098 4.92e-05 ***
-    ## ranktenure track -0.16070    0.07395  -2.173   0.0303 *  
-    ## ranktenured      -0.12623    0.06266  -2.014   0.0445 *  
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5328 on 459 degrees of freedom
-    ## Multiple R-squared:  0.04652,    Adjusted R-squared:  0.04029 
-    ## F-statistic: 7.465 on 3 and 459 DF,  p-value: 6.88e-05
+    ## # A tibble: 4 × 5
+    ##   term             estimate std.error statistic   p.value
+    ##   <chr>               <dbl>     <dbl>     <dbl>     <dbl>
+    ## 1 (Intercept)        3.98      0.0908     43.9  2.92e-166
+    ## 2 bty_avg            0.0678    0.0165      4.10 4.92e-  5
+    ## 3 ranktenure track  -0.161     0.0740     -2.17 3.03e-  2
+    ## 4 ranktenured       -0.126     0.0627     -2.01 4.45e-  2
 
 - Holding rank constant, a one-unit increase in beauty rating predicts a
   .07-point increase in evaluation score.
@@ -444,27 +360,20 @@ section when completing evaluations.
 
 ``` r
 m_cls_profs <- lm(score ~ cls_profs, data = evals)
-summary(m_cls_profs)
+tidy(m_cls_profs)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ cls_profs, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.8554 -0.3846  0.1154  0.4154  0.8446 
-    ## 
-    ## Coefficients:
-    ##                 Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)      4.18464    0.03111 134.493   <2e-16 ***
-    ## cls_profssingle -0.02923    0.05343  -0.547    0.585    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.5443 on 461 degrees of freedom
-    ## Multiple R-squared:  0.0006486,  Adjusted R-squared:  -0.001519 
-    ## F-statistic: 0.2992 on 1 and 461 DF,  p-value: 0.5847
+    ## # A tibble: 2 × 5
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)       4.18      0.0311   134.      0    
+    ## 2 cls_profssingle  -0.0292    0.0534    -0.547   0.585
+
+``` r
+glance(m_cls_profs)$adj.r.squared
+```
+
+    ## [1] -0.0015192
 
 ## Exercise 3
 
@@ -479,73 +388,56 @@ in evaluation scores.
 
 ``` r
 m_full <- lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
-summary(m_full)
+tidy(m_full)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ rank + ethnicity + gender + language + age + 
-    ##     cls_perc_eval + cls_students + cls_level + cls_profs + cls_credits + 
-    ##     bty_avg, data = evals)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -1.84482 -0.31367  0.08559  0.35732  1.10105 
-    ## 
-    ## Coefficients:
-    ##                         Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)            3.5305036  0.2408200  14.660  < 2e-16 ***
-    ## ranktenure track      -0.1070121  0.0820250  -1.305 0.192687    
-    ## ranktenured           -0.0450371  0.0652185  -0.691 0.490199    
-    ## ethnicitynot minority  0.1869649  0.0775329   2.411 0.016290 *  
-    ## gendermale             0.1786166  0.0515346   3.466 0.000579 ***
-    ## languagenon-english   -0.1268254  0.1080358  -1.174 0.241048    
-    ## age                   -0.0066498  0.0030830  -2.157 0.031542 *  
-    ## cls_perc_eval          0.0056996  0.0015514   3.674 0.000268 ***
-    ## cls_students           0.0004455  0.0003585   1.243 0.214596    
-    ## cls_levelupper         0.0187105  0.0555833   0.337 0.736560    
-    ## cls_profssingle       -0.0085751  0.0513527  -0.167 0.867458    
-    ## cls_creditsone credit  0.5087427  0.1170130   4.348  1.7e-05 ***
-    ## bty_avg                0.0612651  0.0166755   3.674 0.000268 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.504 on 450 degrees of freedom
-    ## Multiple R-squared:  0.1635, Adjusted R-squared:  0.1412 
-    ## F-statistic: 7.331 on 12 and 450 DF,  p-value: 2.406e-12
+    ## # A tibble: 13 × 5
+    ##    term                   estimate std.error statistic  p.value
+    ##    <chr>                     <dbl>     <dbl>     <dbl>    <dbl>
+    ##  1 (Intercept)            3.53      0.241       14.7   4.65e-40
+    ##  2 ranktenure track      -0.107     0.0820      -1.30  1.93e- 1
+    ##  3 ranktenured           -0.0450    0.0652      -0.691 4.90e- 1
+    ##  4 ethnicitynot minority  0.187     0.0775       2.41  1.63e- 2
+    ##  5 gendermale             0.179     0.0515       3.47  5.79e- 4
+    ##  6 languagenon-english   -0.127     0.108       -1.17  2.41e- 1
+    ##  7 age                   -0.00665   0.00308     -2.16  3.15e- 2
+    ##  8 cls_perc_eval          0.00570   0.00155      3.67  2.68e- 4
+    ##  9 cls_students           0.000445  0.000358     1.24  2.15e- 1
+    ## 10 cls_levelupper         0.0187    0.0556       0.337 7.37e- 1
+    ## 11 cls_profssingle       -0.00858   0.0514      -0.167 8.67e- 1
+    ## 12 cls_creditsone credit  0.509     0.117        4.35  1.70e- 5
+    ## 13 bty_avg                0.0613    0.0167       3.67  2.68e- 4
+
+``` r
+glance(m_full)$adj.r.squared
+```
+
+    ## [1] 0.1412172
 
 ## Exercise 5
 
 ``` r
 m_best <- lm(score ~ ethnicity + gender + language + age + cls_perc_eval + cls_credits + bty_avg, data = evals)
-summary(m_best)
+tidy(m_best)
 ```
 
-    ## 
-    ## Call:
-    ## lm(formula = score ~ ethnicity + gender + language + age + cls_perc_eval + 
-    ##     cls_credits + bty_avg, data = evals)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -1.9067 -0.3103  0.0849  0.3712  1.0611 
-    ## 
-    ## Coefficients:
-    ##                        Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)            3.446967   0.203191  16.964  < 2e-16 ***
-    ## ethnicitynot minority  0.204710   0.074710   2.740 0.006384 ** 
-    ## gendermale             0.184780   0.049889   3.704 0.000238 ***
-    ## languagenon-english   -0.161463   0.103213  -1.564 0.118427    
-    ## age                   -0.005008   0.002606  -1.922 0.055289 .  
-    ## cls_perc_eval          0.005094   0.001438   3.543 0.000436 ***
-    ## cls_creditsone credit  0.515065   0.104860   4.912 1.26e-06 ***
-    ## bty_avg                0.064996   0.016327   3.981 7.99e-05 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 0.503 on 455 degrees of freedom
-    ## Multiple R-squared:  0.1576, Adjusted R-squared:  0.1446 
-    ## F-statistic: 12.16 on 7 and 455 DF,  p-value: 2.879e-14
+    ## # A tibble: 8 × 5
+    ##   term                  estimate std.error statistic  p.value
+    ##   <chr>                    <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)            3.45      0.203       17.0  2.26e-50
+    ## 2 ethnicitynot minority  0.205     0.0747       2.74 6.38e- 3
+    ## 3 gendermale             0.185     0.0499       3.70 2.38e- 4
+    ## 4 languagenon-english   -0.161     0.103       -1.56 1.18e- 1
+    ## 5 age                   -0.00501   0.00261     -1.92 5.53e- 2
+    ## 6 cls_perc_eval          0.00509   0.00144      3.54 4.36e- 4
+    ## 7 cls_creditsone credit  0.515     0.105        4.91 1.26e- 6
+    ## 8 bty_avg                0.0650    0.0163       3.98 7.99e- 5
+
+``` r
+glance(m_best)$adj.r.squared
+```
+
+    ## [1] 0.1445918
 
 Predicted eval score = 3.45 + .20(ethnicity) + .18(gender) -
 .16(language) - .01(age) + .01(cls_perc_eval) + .52(cls_credits) +
